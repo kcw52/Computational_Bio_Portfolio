@@ -4678,3 +4678,196 @@ plt.imshow(real_chess)
 ```python
 
 ```
+
+## Edge Detection
+
+```python
+import cv2
+```
+
+
+```python
+import numpy as np
+```
+
+
+```python
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+img = cv2.imread("puppy.jpg")
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bd48d7150>
+
+
+
+
+<img width="191" height="252" alt="output_3_1" src="https://github.com/user-attachments/assets/31d8dc93-ffac-4399-a145-168e51ab42d5" />
+
+
+
+```python
+edges = cv2.Canny(image = img, threshold1 = 127, threshold2 = 127)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bd015e790>
+
+
+
+
+<img width="191" height="252" alt="output_4_1" src="https://github.com/user-attachments/assets/820c2974-a43a-4dc9-8067-8a722bcbf1b0" />
+
+
+
+```python
+med_value = np.median(img)
+med_value
+```
+
+
+
+
+    75.0
+
+
+
+
+```python
+lower = int(max(0, 0.7*med_value))
+upper = int(min(255, 1.3*med_value))
+
+edges = cv2.Canny(img, threshold1 = lower, threshold2 = upper)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bd00d83d0>
+
+
+
+
+<img width="191" height="252" alt="output_6_1" src="https://github.com/user-attachments/assets/1d37c0b9-92a8-41fd-91ad-f4a65f9de1c3" />
+
+
+
+```python
+edges = cv2.Canny(image = img, threshold1 = lower, threshold2 = upper + 100)
+
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bd0043110>
+
+
+
+
+<img width="191" height="252" alt="output_7_1" src="https://github.com/user-attachments/assets/38395f94-9fc8-4acd-8662-fca963170dd4" />
+
+
+
+```python
+blurred_img = cv2.blur(img, ksize = (5,5))
+
+edges = cv2.Canny(image = blurred_img,
+                 threshold1 = lower,
+                 threshold2 = upper)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bd003b510>
+
+
+
+
+<img width="191" height="252" alt="output_8_1" src="https://github.com/user-attachments/assets/89fcbdea-79f1-4e77-a861-95e0e28f3052" />
+
+
+
+```python
+blurred_img = cv2.blur(img, ksize = (5,5))
+
+edges = cv2.Canny(image = blurred_img,
+                 threshold1 = lower,
+                 threshold2 = upper + 100)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bcff9d750>
+
+
+
+
+<img width="191" height="252" alt="output_9_1" src="https://github.com/user-attachments/assets/b92b3007-53cb-4b85-8f7a-379eb7027985" />
+
+
+
+```python
+blurred_img = cv2.blur(img, ksize = (7,7))
+
+edges = cv2.Canny(image = blurred_img,
+                 threshold1 = lower,
+                 threshold2 = upper + 60)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bcfee1990>
+
+
+
+
+<img width="191" height="252" alt="output_10_1" src="https://github.com/user-attachments/assets/4b43c217-b845-43d6-b0c1-325f44935636" />
+
+
+
+```python
+blurred_img = cv2.blur(img, ksize = (8,8))
+
+edges = cv2.Canny(image = blurred_img,
+                 threshold1 = lower,
+                 threshold2 = upper)
+plt.imshow(edges)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f7bcfe46a50>
+
+
+
+
+<img width="191" height="252" alt="output_11_1" src="https://github.com/user-attachments/assets/0613c149-5ae6-42a1-8a62-1411c2b8afcf" />
+
+
+
+```python
+
+```
