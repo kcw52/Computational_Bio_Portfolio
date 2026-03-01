@@ -4489,3 +4489,192 @@ show_pic(blended)
 ```python
 
 ```
+
+## Corner Detection
+
+```python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+flat_chess = cv2.imread('greenboard.jpg')
+flat_chess = cv2.cvtColor(flat_chess, cv2.COLOR_BGR2RGB)
+plt.imshow(flat_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb05aea250>
+
+
+
+
+<img width="257" height="252" alt="output_1_1" src="https://github.com/user-attachments/assets/44613606-7a19-4722-ac77-2fba1b204822" />
+
+
+
+```python
+gray_flat_chess = cv2.cvtColor(flat_chess, cv2.COLOR_BGR2GRAY)
+plt.imshow(gray_flat_chess, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb04a1aed0>
+
+
+
+
+<img width="257" height="252" alt="output_2_1" src="https://github.com/user-attachments/assets/4be0a8bf-afc2-4836-9d08-e4f90d52cc90" />
+
+
+
+```python
+real_chess = cv2.imread("chess.jpg")
+real_chess = cv2.cvtColor(real_chess, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+plt.imshow(real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb049fc1d0>
+
+
+
+
+<img width="257" height="252" alt="output_4_1" src="https://github.com/user-attachments/assets/ed65a2d2-2a6e-46f5-aa1d-adb3ca00f6c0" />
+
+
+
+```python
+gray_real_chess = cv2.cvtColor(real_chess, cv2.COLOR_BGR2GRAY)
+plt.imshow(gray_real_chess, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb04960a90>
+
+
+
+
+<img width="257" height="252" alt="output_5_1" src="https://github.com/user-attachments/assets/0d70a77e-478e-4c21-8a8b-e60ff8dedce0" />
+
+
+
+```python
+gray = np.float32(gray_flat_chess)
+dst = cv2.cornerHarris(src = gray, blockSize = 2, ksize = 3, k = 0.04)
+
+dst = cv2.dilate(dst, None)
+```
+
+
+```python
+flat_chess[dst>0.01*dst.max()] = [255,0,0]
+
+plt.imshow(flat_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb048dad10>
+
+
+
+
+<img width="257" height="252" alt="output_7_1" src="https://github.com/user-attachments/assets/3daaf9ef-2134-4d30-917b-bdebb54cf47c" />
+
+
+
+```python
+gray = np.float32(gray_real_chess)
+dst = cv2.cornerHarris(src = gray, blockSize = 2, ksize = 3, k = 0.04)
+dst = cv2.dilate(dst, None)
+
+real_chess[dst>0.01*dst.max()] = [255, 0, 0]
+
+plt.imshow(real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb048bc990>
+
+
+
+
+<img width="257" height="252" alt="output_8_1" src="https://github.com/user-attachments/assets/0858c3c2-b828-431d-abcc-7b32ab9ac8dc" />
+
+
+
+```python
+#Shi-Tomasi Corner Detection
+
+corners = cv2.goodFeaturesToTrack(gray_flat_chess, 64, 0.01, 10)
+```
+
+
+```python
+corners = np.int0(corners)
+
+for i in corners:
+    x,y = i.ravel()
+    cv2.circle(flat_chess, (x,y),3,(255,0,0), -1)
+    
+plt.imshow(flat_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb0482aa50>
+
+
+
+
+<img width="257" height="252" alt="output_10_1" src="https://github.com/user-attachments/assets/0bd1633a-71ab-4978-b45d-7b071d995266" />
+
+
+
+```python
+corners = cv2.goodFeaturesToTrack(gray_real_chess, 100, 0.01, 10)
+
+corners = np.int0(corners)
+
+for i in corners:
+    x, y = i.ravel()
+    cv2.circle(real_chess, (x,y), 3, (0,255, 0), -1)
+    
+plt.imshow(real_chess)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7ffb0478d250>
+
+
+
+
+<img width="257" height="252" alt="output_11_1" src="https://github.com/user-attachments/assets/7f856f51-67e3-4ebe-8678-ecb5de1364d2" />
+
+
+
+```python
+
+```
