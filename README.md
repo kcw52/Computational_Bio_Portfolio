@@ -3272,3 +3272,327 @@ for alignment in blast_record.alignments:
 ```python
 
 ```
+
+## Challenge 1 - Blast of KRAS Gene
+
+```python
+from Bio import Entrez
+
+Entrez.email = "kcc025@email.latech.edu"
+
+handle = Entrez.efetch(
+    db="nucleotide",
+    id="NM_004985.5",  # KRAS mRNA
+    rettype="fasta",
+    retmode="text"
+)
+
+sequence = handle.read()
+
+with open("KRAS.fasta", "w") as f:
+    f.write(sequence)
+
+print("KRAS.fasta downloaded")
+```
+
+    KRAS.fasta downloaded
+
+
+
+```python
+from Bio import Entrez
+
+Entrez.email = "kcc025@email.latech.edu"  # REQUIRED by NCBI
+
+handle = Entrez.efetch(
+    db="nucleotide",
+    id="NM_004985.5",  # KRAS mRNA accession
+    rettype="fasta",
+    retmode="text"
+)
+
+sequence = handle.read()
+
+with open("KRAS.fasta", "w") as f:
+    f.write(sequence)
+
+print("KRAS.fasta downloaded successfully")
+```
+
+    KRAS.fasta downloaded successfully
+
+
+
+```python
+import os
+print(os.path.exists("KRAS.fasta"))
+```
+
+    True
+
+
+
+```python
+from Bio.Blast.Applications import NcbiblastnCommandline
+
+blastn_cline = NcbiblastnCommandline(
+    query="KRAS.fasta",
+    db="your_database_prefix",
+    out="kras_blast.xml",
+    outfmt=5
+)
+
+stdout, stderr = blastn_cline()
+print(stderr)
+```
+
+
+```python
+from Bio.Blast.Applications import NcbimakeblastdbCommandline
+
+make_db = NcbimakeblastdbCommandline(
+    input_file="m_cold.fasta",  # <-- database FASTA
+    dbtype="nucl",
+    out="localdb"               # <-- database prefix name
+)
+
+stdout, stderr = make_db()
+print("makeblastdb stderr:\n", stderr)
+```
+
+    makeblastdb stderr:
+     
+
+
+
+```python
+import glob
+print(glob.glob("localdb.n*"))  # should show localdb.nsq etc
+```
+
+    ['localdb.nin', 'localdb.nsq', 'localdb.nhr']
+
+
+
+```python
+from Bio.Blast.Applications import NcbiblastnCommandline
+
+blastn_cline = NcbiblastnCommandline(
+    query="KRAS.fasta",
+    db="localdb",
+    out="kras_blast.xml",
+    outfmt=5
+)
+
+stdout, stderr = blastn_cline()
+print("blastn stderr:\n", stderr)
+```
+
+    blastn stderr:
+     
+
+
+
+```python
+from Bio.Blast import NCBIXML
+with open("kras_blast.xml") as handle:
+    record = NCBIXML.read(handle)
+print("Alignments:", len(record.alignments))
+```
+
+    Alignments: 0
+
+
+
+```python
+from Bio import SeqIO
+rec = next(SeqIO.parse("KRAS.fasta", "fasta"))
+print(rec.id)
+print("Length:", len(rec.seq))
+print("First 60 bp:", rec.seq[:60])
+```
+
+    NM_004985.5
+    Length: 5306
+    First 60 bp: CTAGGCGGCGGCCGCGGCGGCGGAGGCAGCAGCGGCGGCGGCAGTGGCGGCGGCGAAGGT
+
+
+
+```python
+import os
+print("XML size:", os.path.getsize("kras_blast.xml"))
+```
+
+    XML size: 2046
+
+
+
+```python
+from Bio.Blast.Applications import NcbimakeblastdbCommandline
+
+make_db = NcbimakeblastdbCommandline(
+    input_file="KRAS.fasta",
+    dbtype="nucl",
+    out="kras_db"
+)
+stdout, stderr = make_db()
+print(stderr)
+```
+
+    
+
+
+
+```python
+import glob, os
+print("DB files:", glob.glob("kras_db.n*"))
+for f in glob.glob("kras_db.n*"):
+    print(f, os.path.getsize(f))
+```
+
+    DB files: ['kras_db.nsq', 'kras_db.nin', 'kras_db.nhr']
+    kras_db.nsq 1328
+    kras_db.nin 88
+    kras_db.nhr 150
+
+
+
+```python
+from Bio.Blast.Applications import NcbiblastnCommandline
+
+blastn_cline = NcbiblastnCommandline(
+    query="KRAS.fasta",
+    db="kras_db",
+    out="kras_vs_kras.xml",
+    outfmt=5
+)
+stdout, stderr = blastn_cline()
+print("blastn stderr:\n", stderr)
+```
+
+    blastn stderr:
+     
+
+
+
+```python
+from Bio.Blast import NCBIXML
+
+with open("kras_vs_kras.xml") as handle:
+    record = NCBIXML.read(handle)
+
+print("Alignments:", len(record.alignments))
+if record.alignments:
+    print("Top hit:", record.alignments[0].title)
+```
+
+    Alignments: 1
+    Top hit: gnl|BL_ORD_ID|0 NM_004985.5 Homo sapiens KRAS proto-oncogene, GTPase (KRAS), transcript variant b, mRNA
+
+
+
+```python
+for alignment in record.alignments[:5]:
+    print("Hit:", alignment.hit_def)
+    for hsp in alignment.hsps[:1]:
+        print("Score:", hsp.score, "E-value:", hsp.expect)
+        print("Query snippet:", hsp.query[:50], "...")
+    print("-"*50)
+```
+
+    Hit: NM_004985.5 Homo sapiens KRAS proto-oncogene, GTPase (KRAS), transcript variant b, mRNA
+    Score: 5306.0 E-value: 0.0
+    Query snippet: CTAGGCGGCGGCCGCGGCGGCGGAGGCAGCAGCGGCGGCGGCAGTGGCGG ...
+    --------------------------------------------------
+
+
+
+```python
+
+for alignment in record.alignments[:5]:  # top 5 hits
+    print("Hit:", alignment.hit_def)
+    for hsp in alignment.hsps[:1]:  # top HSP per hit
+        print("Score:", hsp.score, "E-value:", hsp.expect)
+        print("Query snippet:", hsp.query[:50], "...")
+    print("-"*50)
+```
+
+    Hit: NM_004985.5 Homo sapiens KRAS proto-oncogene, GTPase (KRAS), transcript variant b, mRNA
+    Score: 5306.0 E-value: 0.0
+    Query snippet: CTAGGCGGCGGCCGCGGCGGCGGAGGCAGCAGCGGCGGCGGCAGTGGCGG ...
+    --------------------------------------------------
+
+
+
+```python
+
+top_hits = 10  # Number of hits to display
+
+if len(record.alignments) == 0:
+    print("No BLAST hits found.")
+else:
+    print(f"Showing top {min(top_hits, len(record.alignments))} hits:\n")
+    for i, alignment in enumerate(record.alignments[:top_hits], start=1):
+        print(f"Hit #{i}: {alignment.hit_def}")  # Description of the hit
+        for hsp in alignment.hsps[:1]:  # Only show the top HSP per hit
+            print(f"  Score: {hsp.score}, E-value: {hsp.expect}")
+            print(f"  Query snippet: {hsp.query[:50]}...")  # First 50 bases
+        print("-"*60)
+```
+
+    Showing top 1 hits:
+    
+    Hit #1: NM_004985.5 Homo sapiens KRAS proto-oncogene, GTPase (KRAS), transcript variant b, mRNA
+      Score: 5306.0, E-value: 0.0
+      Query snippet: CTAGGCGGCGGCCGCGGCGGCGGAGGCAGCAGCGGCGGCGGCAGTGGCGG...
+    ------------------------------------------------------------
+
+
+
+```python
+E_VALUE_THRESH = 0.04
+
+for alignment in record.alignments:
+    for hsp in alignment.hsps:
+        if hsp.expect < E_VALUE_THRESH:
+            print("Hit:", alignment.hit_def)
+            print("Score:", hsp.score)
+            print("E-value:", hsp.expect)
+            print("-"*50)
+```
+
+    Hit: NM_004985.5 Homo sapiens KRAS proto-oncogene, GTPase (KRAS), transcript variant b, mRNA
+    Score: 5306.0
+    E-value: 0.0
+    --------------------------------------------------
+
+
+
+```python
+E_VALUE_THRESH = 0.04
+
+for alignment in record.alignments:
+    for hsp in alignment.hsps:
+        if hsp.expect < E_VALUE_THRESH:
+            print("****ALIGNMENT****")
+            print("sequence:", alignment.title)
+            print("length:", alignment.length)
+            print("e value:", hsp.expect)
+            print(hsp.query[0:75] + "...")
+            print(hsp.match[0:75] + "...")
+            print(hsp.sbjct[0:75] + "...")
+```
+
+    ****ALIGNMENT****
+    sequence: gnl|BL_ORD_ID|0 NM_004985.5 Homo sapiens KRAS proto-oncogene, GTPase (KRAS), transcript variant b, mRNA
+    length: 5306
+    e value: 0.0
+    CTAGGCGGCGGCCGCGGCGGCGGAGGCAGCAGCGGCGGCGGCAGTGGCGGCGGCGAAGGTGGCGGCGGCTCGGCC...
+    |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||...
+    CTAGGCGGCGGCCGCGGCGGCGGAGGCAGCAGCGGCGGCGGCAGTGGCGGCGGCGAAGGTGGCGGCGGCTCGGCC...
+
+
+
+```python
+# The evalue when compared to chimpanzee is 0.0
+```
