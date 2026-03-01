@@ -4490,6 +4490,7 @@ show_pic(blended)
 
 ```
 
+## Aspect Detection
 ## Corner Detection
 
 ```python
@@ -4871,3 +4872,204 @@ plt.imshow(edges)
 ```python
 
 ```
+
+## Feature Detection
+## Feature Matches
+```python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+def display(img, cmap = 'gray'):
+    fig = plt.figure(figsize = (12, 10))
+    ax = fig.add_subplot(111)
+    ax.imshow(img, cmap = 'gray')
+```
+
+
+```python
+toast_crunch = cv2.imread("crunch.jpg", 0)
+display(toast_crunch)
+```
+
+
+<img width="408" height="578" alt="output_2_0" src="https://github.com/user-attachments/assets/c9ffc04a-d8e5-4cbf-a8e3-ed32029e07c1" />
+
+
+
+```python
+cereals = cv2.imread("collage.jpg", 0)
+display(cereals)
+```
+
+
+<img width="709" height="494" alt="output_3_0" src="https://github.com/user-attachments/assets/2eeb68f8-ef15-4b99-8692-1abb0e28e7ae" />
+
+
+
+```python
+orb = cv2.ORB_create()
+
+kp1, des1 = orb.detectAndCompute(toast_crunch, mask=None)
+kp2,des2 = orb.detectAndCompute(cereals, mask=None)
+```
+
+
+```python
+bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck = True)
+matches = bf.match(des1, des2)
+```
+
+
+```python
+matches = sorted(matches, key = lambda x:x.distance)
+```
+
+
+```python
+toast_crunch_matches = cv2.drawMatches(toast_crunch, kp1, cereals, kp2, matches[:25], None, flags = 2)
+```
+
+
+```python
+sift = cv2.SIFT_create()
+```
+
+
+```python
+kp1,des1 = sift.detectAndCompute(toast_crunch, None)
+kp2, des2 = sift.detectAndCompute(cereals, None)
+```
+
+
+```python
+bf = cv2.BFMatcher()
+matches = bf.knnMatch(des1, des2, k=2)
+```
+
+
+```python
+good = []
+
+for match1, match2 in matches:
+    if match1.distance < 0.75*match2.distance:
+        good.append([match1])
+```
+
+
+```python
+print('Length of total matches:', len(matches))
+print('Length of good matches:', len(good))
+```
+
+    Length of total matches: 4119
+    Length of good matches: 25
+
+
+
+```python
+sift_matches = cv2.drawMatchesKnn(toast_crunch, kp1, cereals, kp2, good, None, flags = 2)
+display(sift_matches)
+```
+
+
+<img width="709" height="459" alt="output_13_0" src="https://github.com/user-attachments/assets/a6c7973e-24c8-4227-a0cb-2a17e7978f37" />
+
+
+
+```python
+sift = cv2.SIFT_create()
+
+kp1,des1 = sift.detectAndCompute(toast_crunch, None)
+kp2, des2 = sift.detectAndCompute(cereals, None)
+```
+
+
+```python
+flann_index_KDtree = 0
+index_params = dict(algorithm=flann_index_KDtree, trees = 5)
+search_params = dict(checks=50)
+```
+
+
+```python
+flann = cv2.FlannBasedMatcher(index_params, search_params)
+
+matches = flann.knnMatch(des1, des2, k=2)
+
+good = []
+
+for match1, match2, in matches:
+    if match1.distance < 0.75*match2.distance:
+        good.append([match1])
+```
+
+
+```python
+flann_matches = cv2.drawMatchesKnn(toast_crunch, kp1, cereals, kp2, good, None, flags = 0)
+display(flann_matches)
+```
+
+
+<img width="709" height="459" alt="output_17_0" src="https://github.com/user-attachments/assets/403ee88f-3924-4623-9502-675fe5b739ee" />
+
+
+
+```python
+sift = cv2.SIFT_create()
+
+kp1, des1 = sift.detectAndCompute(toast_crunch, None)
+kp2, des2 = sift.detectAndCompute(cereals, None)
+```
+
+
+```python
+flann_index_KDtree = 0
+indx_params = dict(algorithm = flann_index_KDtree, trees = 5)
+search_param = dict(checks = 50)
+```
+
+
+```python
+flann = cv2.FlannBasedMatcher(index_params, search_params)
+
+matches = flann.knnMatch(des1, des2, k = 2)
+```
+
+
+```python
+matchesMask = [[0,0] for i in range(len(matches))]
+```
+
+
+```python
+for i, (match1, match2) in enumerate(matches):
+    if match1.distance <0.75*match2.distance:
+        matchesMask[i] = [1,0]
+        
+draw_params = dict(matchColor = (0,255,0),
+                  singlePointColor = (255,0,0),
+                  matchesMask = matchesMask,
+                  flags = 0)
+```
+
+
+```python
+flann_matches = cv2.drawMatchesKnn(toast_crunch, kp1, cereals, kp2, matches, None, **draw_params)
+
+display(flann_matches)
+```
+
+
+<img width="709" height="459" alt="output_23_0" src="https://github.com/user-attachments/assets/308aee2a-ff17-4a77-8eaa-97acea45043b" />
+
+
+
+```python
+
+```
+
