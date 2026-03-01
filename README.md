@@ -3596,3 +3596,896 @@ for alignment in record.alignments:
 ```python
 # The evalue when compared to chimpanzee is 0.0
 ```
+
+## Open CV
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+import cv2
+```
+
+
+```python
+img = cv2.imread("puppy.jpg")
+```
+
+
+```python
+type(img)
+```
+
+
+
+
+    numpy.ndarray
+
+
+
+
+```python
+img_wrong = cv2.imread('wrong/path/doesnot/abcdegh.jpg')
+```
+
+
+```python
+type(img_wrong)
+```
+
+
+
+
+    NoneType
+
+
+
+
+```python
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f3586b35d10>
+
+
+
+
+<img width="191" height="252" alt="output_6_1" src="https://github.com/user-attachments/assets/3c996200-9ef9-4277-a61f-7f647da8ab28" />
+
+
+
+```python
+fix_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+plt.imshow(fix_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f3585f9e550>
+
+
+
+
+<img width="191" height="252" alt="output_8_1" src="https://github.com/user-attachments/assets/151bd024-75c9-402b-974f-011531245657" />
+
+
+
+```python
+img_gray = cv2.imread("puppy.jpg", cv2.IMREAD_GRAYSCALE)
+img_gray.shape
+```
+
+
+
+
+    (4500, 3000)
+
+
+
+
+```python
+plt.imshow(img_gray)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f358474e8d0>
+
+
+
+
+<img width="191" height="252" alt="output_10_1" src="https://github.com/user-attachments/assets/af6b93cf-a7a5-479d-9dba-0a8c4c4a2aa2" />
+
+
+
+```python
+plt.imshow(img_gray, cmap = "gray")
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f35846ed090>
+
+
+
+
+<img width="191" height="252" alt="output_11_1" src="https://github.com/user-attachments/assets/18135b87-210b-4e28-bdce-e782a7a6c228" />
+
+
+
+```python
+fix_img.shape
+```
+
+
+
+
+    (4500, 3000, 3)
+
+
+
+
+```python
+new_img = cv2.resize(fix_img, (1000,400))
+plt.imshow(new_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f35846362d0>
+
+
+
+
+<img width="375" height="169" alt="output_13_1" src="https://github.com/user-attachments/assets/3dbe83b6-033c-4fb0-8584-fcc4503c2a26" />
+
+
+
+```python
+new_img.shape
+```
+
+
+
+
+    (400, 1000, 3)
+
+
+
+
+```python
+w_ratio = 0.5
+h_ratio = 0.5
+
+new_img = cv2.resize(fix_img, (0,0), fix_img, w_ratio, h_ratio)
+```
+
+
+```python
+plt.imshow(new_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f358460ac50>
+
+
+
+
+<img width="191" height="252" alt="output_16_1" src="https://github.com/user-attachments/assets/fc40ebd1-d0b6-495c-a266-6e897d4e197d" />
+
+
+
+```python
+new_img.shape
+```
+
+
+
+
+    (2250, 1500, 3)
+
+
+
+
+```python
+flip_img = cv2.flip(fix_img, 0)
+plt.imshow(flip_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f3584535810>
+
+
+
+
+<img width="191" height="252" alt="output_18_1" src="https://github.com/user-attachments/assets/fee7efa9-b0cf-46ec-831b-0f1388a103e3" />
+
+
+
+```python
+flip_img2 = cv2.flip(fix_img, -1)
+plt.imshow(flip_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f3584550d90>
+
+
+
+
+<img width="191" height="252" alt="output_19_1" src="https://github.com/user-attachments/assets/b476e970-3ed5-4caf-9bb0-8d2eec00c053" />
+
+
+
+```python
+type(fix_img)
+```
+
+
+
+
+    numpy.ndarray
+
+
+
+
+```python
+cv2.imwrite("Mushroom_fixed_image.jpg", fix_img)
+```
+
+
+
+
+    True
+
+
+
+
+```python
+import cv2
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+img = cv2.imread("puppy.jpg")
+```
+
+
+```python
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356cdd3610>
+
+
+
+
+<img width="191" height="252" alt="output_24_1" src="https://github.com/user-attachments/assets/0a28e4b3-281e-41ff-84a7-3f8b22f0e50a" />
+
+
+
+```python
+img1 = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+plt.imshow(img1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356cd62450>
+
+
+
+
+<img width="191" height="252" alt="output_26_1" src="https://github.com/user-attachments/assets/416c62ab-c780-4a62-93df-98ebe538e9f1" />
+
+
+
+```python
+img2 = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+```
+
+
+```python
+plt.imshow(img2)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356cece650>
+
+
+
+
+<img width="191" height="252" alt="output_28_1" src="https://github.com/user-attachments/assets/342d74dd-df95-408d-9c65-eedbc67c98c4" />
+
+
+
+```python
+img3 = cv2.cvtColor(img, cv2.COLOR_BGR2HLS)
+```
+
+
+```python
+plt.imshow(img3)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356cca1450>
+
+
+
+
+<img width="191" height="252" alt="output_30_1" src="https://github.com/user-attachments/assets/57888258-8441-49c7-bd32-be0317aec27b" />
+
+
+
+```python
+img1 = cv2.imread('Desktop/classroom/myfiles/notebooksspython2/anti.jpg')
+img2 = cv2.imread("puppy.jpg")
+```
+
+
+```python
+print(type(img1))
+```
+
+    <class 'NoneType'>
+
+
+
+```python
+import os
+print(os.getcwd())
+```
+
+    /home/student/Desktop/classroom/myfiles/notebooks/python 2
+
+
+
+```python
+os.listdir()
+```
+
+
+
+
+    ['opuntia.dnd',
+     'Seq_Annotation.1pynb',
+     'Sequence_Alignment.ipynb',
+     'sequence.fasta',
+     'OpenCVBasics.ipynb',
+     'puppy.jpg',
+     'opuntia.aln',
+     'Untitled1.ipynb',
+     'Mushroom_fixed_image.jpg',
+     'SeqInOut',
+     'ls_orchid.fasta.txt',
+     'Untitled.ipynb',
+     '.ipynb_checkpoints',
+     'Seq_Annotation',
+     'Blast Project',
+     'Untitled2.ipynb',
+     'Untitled3.ipynb',
+     'ls_orchid.gbk.txt',
+     'Seq_Objects.ipynb']
+
+
+
+
+```python
+import os
+print(os.path.exists('anti.jpg'))
+```
+
+    False
+
+
+
+```python
+import os
+print(os.getcwd())
+os.listdir()
+```
+
+    /home/student/Desktop/classroom/myfiles/notebooks/python 2
+
+
+
+
+
+    ['opuntia.dnd',
+     'Seq_Annotation.1pynb',
+     'Sequence_Alignment.ipynb',
+     'sequence.fasta',
+     'OpenCVBasics.ipynb',
+     'puppy.jpg',
+     'opuntia.aln',
+     'Untitled1.ipynb',
+     'Mushroom_fixed_image.jpg',
+     'SeqInOut',
+     'ls_orchid.fasta.txt',
+     'Untitled.ipynb',
+     '.ipynb_checkpoints',
+     'Seq_Annotation',
+     'Blast Project',
+     'Untitled2.ipynb',
+     'Untitled3.ipynb',
+     'ls_orchid.gbk.txt',
+     'Seq_Objects.ipynb']
+
+
+
+
+```python
+img1 = cv2.imread('Desktop/classroom/myfiles/notebooksspython2/anti.jpg')
+```
+
+
+```python
+img1 = cv2.imread('/home/student/Desktop/anti.jpg')
+img2 = cv2.imread('/home/student/Desktop/puppy.jpg')
+```
+
+
+```python
+import os
+os.listdir('/home/student/Desktop')
+```
+
+
+
+
+    ['environment.yml', 'jupyter_url.txt', 'classroom']
+
+
+
+
+```python
+os.path.exists('anti.jpg')
+```
+
+
+
+
+    False
+
+
+
+
+```python
+import os
+for f in os.listdir():
+    print(repr(f))
+```
+
+    'opuntia.dnd'
+    'Seq_Annotation.1pynb'
+    'Sequence_Alignment.ipynb'
+    'sequence.fasta'
+    'OpenCVBasics.ipynb'
+    'puppy.jpg'
+    'opuntia.aln'
+    'Untitled1.ipynb'
+    'Mushroom_fixed_image.jpg'
+    'SeqInOut'
+    'ls_orchid.fasta.txt'
+    'Untitled.ipynb'
+    'anti.jpg'
+    '.ipynb_checkpoints'
+    'Seq_Annotation'
+    'Blast Project'
+    'Untitled2.ipynb'
+    'Untitled3.ipynb'
+    'ls_orchid.gbk.txt'
+    'Seq_Objects.ipynb'
+
+
+
+```python
+import cv2
+
+img1 = cv2.imread("kitten.jpg")
+img2 = cv2.imread('puppy.jpg')
+print(img1 is None)
+```
+
+    False
+
+
+
+```python
+plt.imshow(img1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356ca551d0>
+
+
+
+
+<img width="248" height="252" alt="output_43_1" src="https://github.com/user-attachments/assets/578e2b5e-5fcb-4975-aa16-a52bcc715724" />
+
+
+
+```python
+img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+```
+
+
+```python
+plt.imshow(img1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356c9a5190>
+
+
+
+
+<img width="248" height="252" alt="output_45_1" src="https://github.com/user-attachments/assets/4a1fe788-f2bd-405c-ae8e-d4480236a75e" />
+
+
+
+```python
+plt.imshow(img2)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356c9342d0>
+
+
+
+
+<img width="191" height="252" alt="output_46_1" src="https://github.com/user-attachments/assets/20f06782-3c2b-466f-b01b-ad2471b1e618" />
+
+
+
+```python
+img1 = cv2.resize(img1, (1200,1200))
+img2 = cv2.resize(img2, (1200,1200))
+```
+
+
+```python
+alpha = 0.5
+beta = 0.5
+```
+
+
+```python
+blended = cv2.addWeighted(img1, alpha, img2, beta, gamma=0)
+```
+
+
+```python
+plt.imshow(blended)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356c9c4150>
+
+
+
+
+<img width="263" height="252" alt="output_50_1" src="https://github.com/user-attachments/assets/6a0b2188-501c-49d9-a81b-515996f86bd2" />
+
+
+
+```python
+alpha = 0.2
+beta = 0.8
+
+blended1 = cv2.addWeighted(img1, alpha, img2, beta, 0)
+```
+
+
+```python
+plt.imshow(blended1)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356d06f150>
+
+
+
+
+<img width="263" height="252" alt="output_52_1" src="https://github.com/user-attachments/assets/3f626ce0-fa63-46cc-afe7-fef3ff91de6f" />
+
+
+
+```python
+img1 = cv2.imread('kitten.jpg')
+img2 = cv2.imread('puppy.jpg')
+
+img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2RGB)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+
+img1 = cv2.resize(img1, (1200,1200))
+```
+
+
+```python
+large_img = img2
+small_img = img1
+
+x_offset = 0
+y_offset = 0
+
+x_end = x_offset + small_img.shape[1]
+y_end = y_offset + small_img.shape[0]
+
+large_img[y_offset:y_end, x_offset:x_end] = small_img
+
+plt.imshow(large_img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f356c7f0710>
+
+
+
+
+<img width="191" height="252" alt="output_54_1" src="https://github.com/user-attachments/assets/d4ecbb70-124a-406f-a4b0-9d7e15cf3178" />
+
+
+
+```python
+# https://github.com/worklifesg/Python-for-Computer-Vision-with-OpenCV-and-Deep-Learning
+```
+
+
+```python
+import cv2
+import matplotlib.pyplot as plt
+%matplotlib inline
+     
+```
+
+
+```python
+img = cv2.imread('rainbow.jpg')
+plt.imshow(img)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fa395a080d0>
+
+
+
+
+<img width="207" height="252" alt="output_57_1" src="https://github.com/user-attachments/assets/fd649958-2b67-4d9d-910c-373636e6834c" />
+
+
+
+```python
+#to read in grayscale just directly add 0
+img = cv2.imread('rainbow.jpg',0)
+plt.imshow(img,cmap='gray')
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fa3959c2ad0>
+
+
+
+
+<img width="207" height="252" alt="output_58_1" src="https://github.com/user-attachments/assets/641ad7c2-039b-4e6d-a360-aa36be89917c" />
+
+
+
+```python
+ret1, thresh1 = cv2.threshold(img,127,255,cv2.THRESH_BINARY) 
+#threshold = 127 as near to half of 255 pixel #can check from img.max()
+#any value below 127 will be 0 and above 127 will be 255
+```
+
+
+```python
+ret1
+```
+
+
+
+
+    127.0
+
+
+
+
+```python
+plt.imshow(thresh1, cmap ='gray')
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fa394888bd0>
+
+
+
+
+<img width="207" height="252" alt="output_61_1" src="https://github.com/user-attachments/assets/08ea4efc-c480-4a78-bd93-2df584d74081" />
+
+
+
+```python
+img2 = cv2.imread('rainbow.jpg', 0)
+ret1, thresh1 = cv2.threshold(img2, 127, 255, cv2.THRESH_TRUNC)
+plt.imshow(thresh1, cmap ='gray') 
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fa394710dd0>
+
+
+
+
+<img width="207" height="252" alt="output_62_1" src="https://github.com/user-attachments/assets/ff9d637f-1c19-44ab-8d20-b3aa441b6e28" />
+
+
+
+```python
+img3 = cv2.imread('rainbow.jpg', 0)
+ret1, thresh1 = cv2.threshold(img3, 127, 255, cv2.THRESH_TOZERO)
+plt.imshow(thresh1, cmap ='gray') 
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fa394678950>
+
+
+
+
+<img width="207" height="252" alt="output_63_1" src="https://github.com/user-attachments/assets/6e83ba8e-df5d-4b05-8e86-ba1377833569" />
+
+
+
+```python
+img_r = cv2.imread('crossword.jpg',0)
+plt.imshow(img_r,cmap='gray')
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7fa39455f250>
+
+
+
+
+<img width="178" height="252" alt="output_64_1" src="https://github.com/user-attachments/assets/a1a02938-c5c4-4a98-bb56-b30af528a150" />
+
+
+
+```python
+def show_pic(img):
+    fig = plt.figure(figsize = (15,15))
+    ax = fig.add_subplot(111)
+    ax.imshow(img, cmap = "gray")
+```
+
+
+```python
+show_pic(img_r)
+```
+
+
+<img width="557" height="850" alt="output_66_0" src="https://github.com/user-attachments/assets/eca9b747-7f95-457d-ae36-063d112d191c" />
+
+
+
+```python
+ret, th1 = cv2.threshold(img_r, 127, 255, cv2.THRESH_BINARY)
+show_pic(th1)
+```
+
+
+<img width="557" height="850" alt="output_67_0" src="https://github.com/user-attachments/assets/7e078361-a47f-415d-88cc-5c829b920df5" />
+
+
+
+```python
+ret, th1 = cv2.threshold(img_r, 200, 255, cv2.THRESH_BINARY)
+show_pic(th1)
+```
+
+
+<img width="557" height="850" alt="output_68_0" src="https://github.com/user-attachments/assets/4e2ff0b3-c96b-40a2-907c-69c13a45658a" />
+
+
+
+```python
+th2 = cv2.adaptiveThreshold(img_r, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11,8)
+```
+
+
+```python
+show_pic(th2)
+```
+
+
+<img width="557" height="850" alt="output_70_0" src="https://github.com/user-attachments/assets/a03d6c3e-27d9-4dd5-8cb9-d97359b72ecc" />
+
+
+
+```python
+blended = cv2.addWeighted(src1 = th1, alpha = 0.6,
+                          src2 = th2, beta = 0.4,gamma = 0)
+show_pic(blended)
+```
+
+
+<img width="557" height="850" alt="output_71_0" src="https://github.com/user-attachments/assets/72a1e88d-83e7-4663-bf87-74662e72cf4b" />
+
+
+
+```python
+th3 = cv2.adaptiveThreshold(img_r, 255, cv2.ADAPTIVE_THRESH_MEAN_C,cv2.THRESH_BINARY,11,8)
+blended = cv2.addWeighted(src1 = th1, alpha = 0.6,
+                          src2 = th3, beta = 0.4,gamma = 0)
+show_pic(blended)
+```
+
+
+<img width="557" height="850" alt="output_72_0" src="https://github.com/user-attachments/assets/a4e8eb14-3888-4d9a-93ed-9819b7c699e2" />
+
+
+
+```python
+
+```
