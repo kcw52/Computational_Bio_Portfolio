@@ -5073,3 +5073,135 @@ display(flann_matches)
 
 ```
 
+## Object Detection
+
+```python
+import cv2
+
+```
+
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+
+
+```python
+full = cv2.imread("train.jpg")
+```
+
+
+```python
+full = cv2.cvtColor(full, cv2.COLOR_BGR2RGB)
+plt.imshow(full)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f2293e4bbd0>
+
+
+
+
+<img width="265" height="252" alt="output_3_1" src="https://github.com/user-attachments/assets/2f444a88-9dc7-4b41-ac7c-385de58c4d4e" />
+
+
+
+```python
+test = cv2.imread("test.jpg")
+test = cv2.cvtColor(test, cv2.COLOR_BGR2RGB)
+plt.imshow(test)
+```
+
+
+
+
+    <matplotlib.image.AxesImage at 0x7f2293dbba50>
+
+
+
+
+<img width="372" height="252" alt="output_4_1" src="https://github.com/user-attachments/assets/4a360b10-5319-42a9-938d-9ee8f58df959" />
+
+
+
+```python
+print("Test image shape:", full.shape)
+print('Train image shape:', test.shape)
+```
+
+    Test image shape: (604, 612, 3)
+    Train image shape: (1280, 1920, 3)
+
+
+
+```python
+methods = ['cv2.TM_CCOEFF', 'cv2.TM_CCOEFF_NORMED', 'cv2.TM_CCORR', 'cv2.TM_CCORR_NORMED', "cv2.TM_SQDIFF", "cv2.TM_SQDIFF_NORMED"]
+```
+
+
+```python
+for m in methods:
+    
+    test_copy = test.copy()
+    method = eval(m)
+    
+    res = cv2.matchTemplate(test_copy, full, method)
+    
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+    
+    if method in [cv2.TM_SQDIFF, cv2.TM_SQDIFF_NORMED]:
+        top_left = min_loc
+    else:
+            top_left = max_loc
+            
+            height, width, channels = full.shape
+            bottom_right = (top_left[0] + width, top_left[1] + height)
+            
+            cv2.rectangle(test_copy, top_left, bottom_right, (255,0,0), 10)
+                         
+            plt.subplot(121)
+            plt.imshow(res)
+            plt.title("Heatmap of template matching")
+            plt.subplot(122)
+            plt.imshow(test_copy)
+            plt.title("Detection of template")
+                         
+            plt.suptitle(m)
+                         
+            plt.show()
+            print('\n')
+            print('\n')
+```
+
+
+<img width="375" height="219" alt="output_7_0" src="https://github.com/user-attachments/assets/89988989-109d-477a-8e3c-5f3a6d4bdb98" />
+
+
+
+<img width="375" height="219" alt="output_7_2" src="https://github.com/user-attachments/assets/b80f65d6-5f57-4e47-b023-af92fe16cefe" />
+
+
+
+
+<img width="375" height="219" alt="output_7_4" src="https://github.com/user-attachments/assets/5ec649af-427f-41da-ad5f-3a7f662d1a2d" />
+
+
+
+
+<img width="375" height="219" alt="output_7_6" src="https://github.com/user-attachments/assets/33d235ee-3fcc-4b06-a721-a350803708c0" />
+
+
+ 
+
+```python
+
+```
+
+
+```python
+
+```
